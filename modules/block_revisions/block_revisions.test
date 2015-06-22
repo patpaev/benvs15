@@ -1,0 +1,125 @@
+<?php
+
+/**
+ * @file
+ * Simpletest tests for the Block Revisions module.
+ */
+
+class BlockRevisionsTestCase extends DrupalWebTestCase {
+  protected $privileged_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Block Revisions',
+      'description' => 'Test basic Block Revisions functionality.',
+      'group' => 'Block Revisions',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp('block_revisions');
+
+    // Create and log in an administrative user having access to the Full HTML
+    // text format.
+    $full_html_format = filter_format_load('full_html');
+    $this->privileged_user = $this->drupalCreateUser(array(
+      'administer blocks',
+      filter_permission_name($full_html_format),
+      'access administration pages',
+    ));
+    $this->drupalLogin($this->privileged_user);
+  }
+
+  public function testCreatingRevisions() {
+    $this->drupalGet('admin/structure/block/add');
+    $this->assertText(t('Log message'), t('Revision form is added to the block add form.'));
+
+    $filtered_html_format = filter_format_load('filtered_html');
+    $full_html_format = filter_format_load('full_html');
+
+    $edit = array(
+      'info' => $block_info_1 = $this->randomName(32),
+      'title' => $block_title_1 = $this->randomName(32),
+      'revision' => TRUE,
+      'body[value]' => $body_content_1 = $this->randomName(64),
+      'body[format]' => $filtered_html_format->format,
+      'log' => $log_message_1 = $this->randomName(64),
+    );
+    $this->drupalPost(NULL, $edit, t('Save block'));
+
+    // Test for the presence of the revision tab.
+    $this->drupalGet('admin/structure/block/manage/block/1/configure');
+    $this->assertText(t('Revisions'), t('Found the revisions tab.'));
+    $this->clickLink(t('Revisions'));
+    $this->assertText($log_message_1, t('Found the first revision.'));
+
+    $edit = array(
+      'revision' => TRUE,
+      'log' => $log_message_2 = $this->randomName(64),
+      'body[value]' => $body_content_2 = $this->randomName(64),
+      'body[format]' => $full_html_format->format,
+    );
+    $this->drupalPost('admin/structure/block/manage/block/1/configure', $edit, t('Save block'));
+
+    // Test for the presence of the revision tab.
+    $this->drupalGet('admin/structure/block/manage/block/1/configure');
+    $this->clickLink(t('Revisions'));
+    $this->assertText($log_message_1, t('Found the first revision.'));
+    $this->assertText($log_message_2, t('Found the second revision.'));
+
+    // Change the custom block without creating a new revision.
+    $edit = array(
+      'revision' => FALSE,
+      'body[value]' => $this->randomName(64),
+    );
+    $this->drupalPost('admin/structure/block/manage/block/1/configure', $edit, t('Save block'));
+    $this->drupalGet('admin/structure/block/manage/block/1/configure');
+    $this->clickLink(t('Revisions'));
+    $this->assertText(t('Warning: the block has been altered since the most recent revision.'), t('Found the block altered warning message.'));
+
+    // Revert to the first revision.
+    $this->drupalGet('admin/structure/block/manage/block/1/configure');
+    $this->clickLink(t('Revisions'));
+    $this->clickLink(t('revert'), 1);
+    $this->assertText(t('Are you sure you want to revert the revision?'), t('Confirmation form for revert found.'));
+    $this->drupalPost(NULL, NULL, t('Revert'));
+    $this->clickLink(t('Configure block'));
+    $this->assertFieldByName('body[value]', $body_content_1, t('Block content was reverted.'));
+    $this->assertFieldByName('body[format]', $filtered_html_format->format, t('Block content input format was reverted.'));
+
+    // Create a second block, this time without a revision.
+    $edit = array(
+      'info' => $this->randomName(32),
+      'title' => $this->randomName(32),
+      'revision' => FALSE,
+      'body[value]' => $body_content_3 = $this->randomName(64),
+    );
+    $this->drupalPost('admin/structure/block/add', $edit, t('Save block'));
+    $this->drupalGet('admin/structure/block/manage/block/2/configure');
+    $this->assertNoLink(t('Revisions'));
+
+    $edit = array(
+      'revision' => TRUE,
+      'log' => $this->randomName(64),
+      'body[value]' => $this->randomName(64),
+    );
+    $this->drupalPost(NULL, $edit, t('Save block'));
+    $this->drupalGet('admin/structure/block/manage/block/2/configure');
+    $this->assertLink(t('Revisions'));
+
+    $this->drupalGet('admin/structure/block/manage/block/1/revisions');
+    $this->clickLink(t('delete'), 2);
+    $this->drupalPost(NULL, NULL, t('Delete'));
+    $this->assertNoText($log_message_1, t('Revision 1 deleted.'));
+    $this->assertText($log_message_2, t('Revision 2 still present.'));
+
+    // Delete the block. All revisions should be gone.
+    $this->drupalPost('admin/structure/block/manage/block/1/delete', NULL, t('Delete'));
+    $revision_count = db_select('boxes_revisions')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+    $this->assertTrue($revision_count == 1, t('Revisions for deleted block have been removed.'));
+    $this->assertRaw(t("All revisions for custom block '%info' have been deleted.", array('%info' => $block_info_1)), t('Revision deletion message found.'));
+  }
+}

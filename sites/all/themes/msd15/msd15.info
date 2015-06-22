@@ -1,0 +1,24 @@
+name = MSD 2015
+description = Theme for MSD 2015
+package = Unimelb
+core = 7.x
+engine = phptemplate
+
+regions[byline]			= Site or Page Byline
+regions[banner]    		= Home Page Banner
+regions[content]        = Content
+regions[navigation]		= Navigation
+regions[aside]  		= Aside
+regions[footer]			= Footer
+regions[rightcolumn]	= Right Column
+
+; Disable unneeded features
+features[] = logo
+features[] = name
+;features[] = slogan
+;features[] = node_user_picture
+;features[] = comment_user_picture
+;features[] = comment_user_verification
+features[] = favicon
+;features[] = main_menu
+;features[] = secondary_menu

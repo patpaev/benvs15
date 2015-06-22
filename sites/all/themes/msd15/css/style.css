@@ -1,0 +1,168 @@
+/* @import must be at top of file, otherwise CSS will not work */
+@import url("//hello.myfonts.net/count/2a9d72");
+@font-face {font-family: 'HelveticaNeueLTStd-Bd';src: url('../webfonts/2A9D72_0_0.eot');src: url('../webfonts/2A9D72_0_0.eot?#iefix') format('embedded-opentype'),url('../webfonts/2A9D72_0_0.woff') format('woff'),url('../webfonts/2A9D72_0_0.ttf') format('truetype');}
+@font-face {font-family: 'HelveticaNeueLTStd-Roman';src: url('../webfonts/2A9D72_1_0.eot');src: url('../webfonts/2A9D72_1_0.eot?#iefix') format('embedded-opentype'),url('../webfonts/2A9D72_1_0.woff') format('woff'),url('../webfonts/2A9D72_1_0.ttf') format('truetype');}
+@font-face {font-family: 'HelveticaNeueLT-Light';src: url('../webfonts/2A9D72_2_0.eot');src: url('../webfonts/2A9D72_2_0.eot?#iefix') format('embedded-opentype'),url('../webfonts/2A9D72_2_0.woff') format('woff'),url('../webfonts/2A9D72_2_0.ttf') format('truetype');}
+ 
+.uomcontent .drupal-tabs {
+  border-radius: 3px;
+  border-radius: 0.1875rem;
+  background-color: #0c304a;
+  border: 1px solid #304e64;
+  color: #fff;
+  position: absolute;
+  right: 10px;
+  top: 110px;
+  z-index: 10;
+}
+
+.uomcontent .drupal-tabs ul {
+  font-size: 85%;
+  margin: 0.5em 0;
+  padding: 0 1em;
+}
+
+.uomcontent .drupal-tabs li {
+  display: inline;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.uomcontent .drupal-tabs li a {
+  border-radius: 3px;
+  border-radius: 0.1875rem;
+  color: white;
+  display: inline-block;
+  padding: 5px 0;
+  margin: 0.1em 0.2em;
+  text-align: center;
+  text-decoration: none;
+  -webkit-transition: background-color 0.2s, -webkit-transform 0.3s;
+  transition: background-color 0.2s, transform 0.3s;
+  width: 75px;
+}
+
+.uomcontent .drupal-tabs a:hover {
+  background-color: #359aec;
+  color: #fff;
+  text-decoration: none;
+  -webkit-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  transform: scale(1.2);
+}
+
+.uomcontent .region-navigation {
+  display: inline-block;
+}
+
+.region-navigation .contextual-links-trigger {
+  display: inline-block!important;
+}
+
+.uomcontent .major .fullwidth p {
+  font-size: 1em;
+  line-height: 1.5789;
+}
+
+.legend {
+  display: table;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+.legend div {
+  display: table-cell;
+  margin: 20px;
+  text-align: center;
+  width: 100px;
+}
+
+.legend .label {
+  display: inline-block;
+  font-size: 13px;
+  width: 100%;
+}
+
+.circle {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+  display: inline-block;
+  height: 65px;
+  margin: 0 auto;
+  width: 65px;
+}
+
+.category-a { background-color: #d2f1cf; }
+.category-b { background-color: #F8D99B; }
+.category-c { background-color: #e1eaf5; }
+.category-d { background-color: #82a1bd; }
+.category-e { background-color: #fffbcc; }
+.category-f { background-color: #D9CAE2; }
+.category-g { background-color: #FCE7EF; }
+
+@media screen and (min-width: 769px) {
+  .course-plan table {
+    table-layout: fixed;
+  }
+}
+
+.uomcontent [role="main"] .course-plan  thead .width-setting {
+  border-width: 0;
+  padding: 0;
+  visibility: hidden;
+}
+
+.uomcontent [role="main"] .course-plan  thead .width-setting * {
+  border-width: 0;
+  padding: 0;
+}
+
+.uomcontent [role="main"] .course-plan .equalwidth {
+  width: 20%;
+}
+
+.uomcontent [role="main"] .course-plan .year {
+  width: 8%;
+}
+
+.uomcontent [role="main"] .course-plan .semester {
+  width: 12%;
+}
+
+.node-type-major .fullwidth {
+  background-position: 83% 100%;
+  display: block;
+}
+.node-type-major .fullwidth blockquote {
+  padding-bottom: 0;
+}
+
+.node-type-major .fullwidth p {
+  padding-top: 0;
+  padding-right: 1em;
+}
+.node-type-major .half .fullwidth blockquote {
+  max-width: 490px;
+}
+.uomcontent .half > section:first-child {
+  padding-right: 0.75em;
+}
+.uomcontent .half > section:last-child {
+  padding-left: 0.75em;
+}
+.node-type-major .fullwidth {
+  height: 550px;
+}
+@media screen and (min-height: 700px) {
+  .node-type-major .fullwidth {
+    height: 650px;
+  }
+}
+@media screen and (min-height: 1200px) {
+  .node-type-major .fullwidth {
+    height: 750px;
+  }
+}

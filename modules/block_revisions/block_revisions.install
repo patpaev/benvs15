@@ -1,0 +1,136 @@
+<?php
+
+/**
+ * @file
+ * Installation routines for the Block Revisions module.
+ */
+
+/**
+ * @todo: populate the boxes_revisions table with current revisions upon installation.
+ */
+
+/**
+ * Enable block revisions by default.
+ */
+define('BLOCK_REVISION_DEFAULT', TRUE);
+
+/**
+ * Implements hook_schema().
+ */
+function block_revisions_schema() {
+  $schema['boxes_revisions'] = array(
+    'description' => 'Stores the revision history of content for custom-made blocks.',
+    'fields' => array(
+      'brid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => "A unique id for this revision.",
+      ),
+      'bid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => "The block's {block}.bid.",
+      ),
+      'vid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => "The revision id.",
+      ),
+      'uid' => array(
+        'description' => 'The {users}.uid that created this version.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'body' => array(
+        'type' => 'text',
+        'not null' => FALSE,
+        'size' => 'big',
+        'description' => 'Block contents.',
+      ),
+      'format' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The {filter_format}.format of the block body.',
+      ),
+      'log' => array(
+        'description' => 'The log entry explaining the changes in this version.',
+        'type' => 'text',
+        'not null' => TRUE,
+        'size' => 'big',
+      ),
+      'timestamp' => array(
+        'description' => 'A Unix timestamp indicating when this version was created.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'unique keys' => array('revision' => array('bid', 'vid')),
+    'primary key' => array('brid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_schema_alter().
+ *
+ * Alters the schema for the {block_custom} table, adding two extra columns.
+ */
+function block_revisions_schema_alter(&$schema) {
+  $schema['block_custom']['fields']['uid'] = array(
+    'description' => 'The {users}.uid of the user that created or updated this block.',
+    'type' => 'int',
+    'not null' => FALSE,
+  );
+  $schema['block_custom']['fields']['timestamp'] = array(
+    'description' => 'A Unix timestamp indicating when this block was last updated.',
+    'type' => 'int',
+    'not null' => FALSE,
+  );
+}
+
+/**
+ * Implements hook_install().
+ */
+function block_revisions_install() {
+  db_add_field('block_custom', 'uid', array('description' => 'The {users}.uid of the user that created or updated this block.', 'type' => 'int', 'not null' => FALSE));
+  db_add_field('block_custom', 'timestamp', array('description' => 'A Unix timestamp indicating when this block was last updated.', 'type' => 'int', 'not null' => FALSE));
+
+  variable_set('block_revisions_revision_default', BLOCK_REVISION_DEFAULT);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function block_revisions_uninstall() {
+  db_drop_field('block_custom', 'uid');
+  db_drop_field('block_custom', 'timestamp');
+
+  // Clean up the variables set/used by this module.
+  variable_del('block_revisions_revision_default');
+}
+
+/**
+ * Change {boxes_revisions}.format into varchar.
+ */
+function block_revisions_update_7000() {
+  db_change_field('boxes_revisions', 'format', 'format', array(
+    'type' => 'varchar',
+    'length' => 255,
+    'not null' => FALSE,
+    'description' => 'The {filter_format}.format of the block body.',
+  ));
+  $existing_formats = db_query("SELECT format FROM {filter_format}")->fetchCol();
+  $default_format = variable_get('filter_fallback_format', 1);
+  db_update('boxes_revisions')
+    ->fields(array('format' => $default_format))
+    ->isNotNull('format')
+    ->condition('format', $existing_formats, 'NOT IN')
+    ->execute();
+}

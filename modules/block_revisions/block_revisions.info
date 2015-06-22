@@ -1,0 +1,12 @@
+name = Block Revisions
+description = Keep revisions for custom block content.
+core = 7.x
+dependecies[] = block
+files[] = block_revisions.test
+
+; Information added by Drupal.org packaging script on 2014-10-02
+version = "7.x-1.0+0-dev"
+core = "7.x"
+project = "block_revisions"
+datestamp = "1412240578"
+

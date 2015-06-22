@@ -1,0 +1,196 @@
+<?php
+
+/**
+ * @todo: delete revisions when a custom block is deleted.
+ */
+
+
+/**
+ * Implements hook_menu().
+ */
+function block_revisions_menu() {
+  // Add a 'revisions' tab when configuring blocks.
+  $items['admin/structure/block/manage/%/%/revisions'] = array(
+    'title' => 'Revisions',
+    'page callback' => 'block_revisions_overview',
+    'page arguments' => array(5),
+    'access callback' => '_block_revisions_access',
+    'access arguments' => array(4, 5),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'block_revisions.admin.inc',
+  );
+
+  // Menu callback for deleting a previous revision.
+  $items['admin/structure/block/revisions/delete/%/%block_revision'] = array(
+    'title' => 'Delete earlier revision',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('block_revisions_delete_confirm', 6),
+    'load arguments' => array(5),
+    'access callback' => '_block_revisions_access',
+    'access arguments' => array('block', 5),
+    'type' => MENU_CALLBACK,
+    'file' => 'block_revisions.admin.inc',
+  );
+
+  // Menu callback for reverting to a previous revision.
+  $items['admin/structure/block/revisions/revert/%/%block_revision'] = array(
+    'title' => 'Delete earlier revision',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('block_revisions_revert_confirm', 6),
+    'load arguments' => array(5),
+    'access callback' => '_block_revisions_access',
+    'access arguments' => array('block', 5),
+    'type' => MENU_CALLBACK,
+    'file' => 'block_revisions.admin.inc',
+  );
+
+  return $items;
+}
+
+function block_revision_load($vid, $delta) {
+  $query = 'SELECT br.bid, vid, body, format, br.timestamp, br.log, u.uid, u.name FROM {boxes_revisions} br LEFT JOIN {users} u ON br.uid = u.uid WHERE br.bid = :bid AND br.vid = :vid';
+  $revision = db_query($query, array(':bid' => $delta, ':vid' => $vid))->fetchObject();
+  return $revision;
+}
+
+/**
+ * Access callback for the revisions tab.
+ *
+ * Revisions are only supported for custom blocks ($module = 'block'),
+ * so deny access to hide the tab for other types of blocks.
+ *
+ *  @todo: only show the revisions tab when there is more than one revision,
+ *  similar to node.module revisions.
+ */
+function _block_revisions_access($module, $delta) {
+  if ($module !== 'block') {
+    return FALSE;
+  }
+  $revision_count = db_query('SELECT count(vid) FROM {boxes_revisions} WHERE bid = :bid', array(':bid' => $delta))->fetchField();
+
+  return user_access('administer blocks') && ($revision_count >= 1);
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Alter the form for custom block edits and additions, injecting the
+ * revisions sub-form and adding the necessary submit handlers.
+ */
+function block_revisions_form_alter(&$form, $form_state, $form_id) {
+  $module = arg(4);
+
+  // Alter the form if the user is adding a new custom block, or when he/she
+  // is editing an existing custom block.
+  if ($form_id === 'block_add_block_form' || ($form_id === 'block_admin_configure' && isset($module) && $module === 'block')) {
+    $form['block_settings'] = _block_revisions_form();
+
+    // Add a submit handler to update the boxes and boxes_revision tables
+    // after the user saved the block.
+    $form['#submit'][] = '_block_revisions_form_submit';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Alter the form for custom block deletes. If a block gets deleted,
+ * all of the revisions are removed too.
+ */
+function block_revisions_form_block_custom_block_delete_alter(&$form, &$form_state) {
+  array_unshift($form['#submit'], 'block_revisions_delete_revisions');
+}
+
+function _block_revisions_form() {
+  $form['revision_information'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Revision information'),
+    '#collapsible' => TRUE,
+    // Collapsed by default when "Create new revision" is unchecked
+    '#collapsed' => FALSE,
+    '#weight' => 20,
+  );
+  $form['revision_information']['revision'] = array(
+    '#access' => user_access('administer blocks'),
+    '#type' => 'checkbox',
+    '#title' => t('Create new revision'),
+    '#default_value' => variable_get('block_revisions_revision_default', FALSE),
+  );
+  $form['revision_information']['log'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Log message'),
+    '#rows' => 2,
+    '#description' => t('An explanation of the additions or updates being made to help other authors understand your motivations.'),
+  );
+
+  return $form;
+}
+
+function _block_revisions_form_submit($form, &$form_state) {
+  global $user;
+
+  $values = $form_state['values'];
+
+  // Get the bid. If this handler is called as the result of an edit,
+  // delta will be passed in the form values array. If this is an
+  // addition, we need to get the new bid from the database.
+  if (isset($values['delta'])) {
+    $delta = $values['delta'];
+  }
+  else {
+    $delta = db_query("SELECT bid FROM {block_custom} WHERE info = :info", array(':info' => $values['info']))->fetchField();
+  }
+
+  if ($values['revision']) {
+    // The "Create a new revision" checkbox was checked, so we need
+    // to save a record to the boxes_revisions table.
+    block_revisions_create_revision($delta, $values['body']['value'], $values['body']['format'], $values['log']);
+  }
+
+  // Update the boxes table for the block that was just saved,
+  // adding a timestamp and user information.
+  db_update('block_custom')
+    ->fields(array(
+      'uid' => $user->uid,
+      'timestamp' => REQUEST_TIME,
+    ))
+    ->condition('bid', $delta)
+    ->execute();
+}
+
+/**
+ * @todo Please document this function.
+ * @see http://drupal.org/node/1354
+ */
+function block_revisions_create_revision($bid, $body, $format, $log = NULL) {
+  global $user;
+
+  $revision = new stdClass();
+  $revision->bid = $bid;
+  $revision->body = $body;
+  $revision->format = $format;
+  $revision->log = $log;
+
+  // Fetch the current revision number for this block to determine
+  // the next revision number.
+  $revision_id = db_query('SELECT max(vid) FROM {boxes_revisions} WHERE bid = :bid', array(':bid' => $bid))->fetchField();
+  $revision->vid = (isset($revision_id) ? $revision_id + 1 : 1);
+  $revision->timestamp = REQUEST_TIME;
+  $revision->uid = $user->uid;
+  return drupal_write_record('boxes_revisions', $revision);
+}
+
+/**
+ * @todo Please document this function.
+ * @see http://drupal.org/node/1354
+ */
+function block_revisions_delete_revisions($form, &$form_state) {
+  $values = $form_state['values'];
+
+  db_delete('boxes_revisions')
+    ->condition('bid', $values['bid'])
+    ->execute();
+
+  watchdog('content', "Deleted all remaining revisions for custom block '%title'.", array('%title' => $values['info']));
+  drupal_set_message(t("All revisions for custom block '%title' have been deleted.", array('%title' => $values['info'])));
+}
