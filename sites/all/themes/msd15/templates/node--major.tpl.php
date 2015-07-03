@@ -33,6 +33,9 @@ $youtube_embed_url = $item_youtube_embed_url[0]['value'];
 $item_sample_course_plan = field_get_items('node', $node, 'field_sample_course_plan');
 $sample_course_plan = field_view_value('node', $node, 'field_sample_course_plan', $item_sample_course_plan[0]);
 
+$item_show_legend = field_get_items('node', $node, 'field_show_legend');
+$show_legend = $item_show_legend[0]['value'];
+
 $has_student_quote = ( $item_student_photo && $item_student_quote && $item_student_quote_caption );
 
 ?>
@@ -50,7 +53,7 @@ $has_student_quote = ( $item_student_photo && $item_student_quote && $item_stude
     </section> <!-- /left half -->
     <section> <!-- right half -->
 
-      <div class="fullwidth" style="background-image:url(<?= $student_photo_url ?>); background-position: 59% 100%;">
+      <div class="fullwidth" style="background-image:url(<?= $student_photo_url ?>); background-position: 40% 100%;">
         <section>
           <blockquote>
             <?= $student_quote; ?>
@@ -90,24 +93,25 @@ $has_student_quote = ( $item_student_photo && $item_student_quote && $item_stude
   <section class="course-plan">
     <h2 class="title">Sample Course Plan</h2>
     <?php print render($sample_course_plan); ?>
-
-    <div class="legend">
-      <div><span class="circle category-a"></span><span class="label">First-year subjects</span></div>
-      <div><span class="circle category-e"></span><span class="label">Enabling subjects</span></div>
-      <div><span class="circle category-c"></span><span class="label">Major subject</span></div>
-      <div><span class="circle category-b"></span><span class="label">Elective subject</span></div>
-      <div><span class="circle category-f"></span><span class="label">Breadth subject</span></div>
-      <div><span class="circle category-g"></span><span class="label">Free points</span></div>
+    <?php if($show_legend): ?>
+      <div class="legend">
+        <div><span class="circle category-a"></span><span class="label">First-year subjects</span></div>
+        <div><span class="circle category-e"></span><span class="label">Enabling subjects</span></div>
+        <div><span class="circle category-c"></span><span class="label">Major subject</span></div>
+        <div><span class="circle category-b"></span><span class="label">Elective subject</span></div>
+        <div><span class="circle category-f"></span><span class="label">Breadth subject</span></div>
+        <div><span class="circle category-g"></span><span class="label">Free points</span></div>
     </div>
+    <?php endif; ?>
   </section>
 <?php endif; ?>
   
 <!--         bottom of page content -->
 <div class="half">
   <section class="center">
-    <a class="button-hero-reverse" href="#">All majors</a>
+    <a class="button-hero-reverse" href="/majors">All majors</a>
   </section>
   <section class="center">
-    <a class="button-hero" href="pathfinder">Course structure</a>
+    <a class="button-hero" href="/course">Apply now</a>
   </section>
 </div>

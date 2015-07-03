@@ -4,13 +4,14 @@ package = Unimelb
 core = 7.x
 engine = phptemplate
 
-regions[byline]			= Site or Page Byline
-regions[banner]    		= Home Page Banner
+regions[aside]      = Aside
+regions[byline]      = Byline
+regions[child_pages]     = Child pages
 regions[content]        = Content
+regions[footer]     = Footer
+regions[grandchild_pages]     = Grandchild pages
 regions[navigation]		= Navigation
-regions[aside]  		= Aside
-regions[footer]			= Footer
-regions[rightcolumn]	= Right Column
+
 
 ; Disable unneeded features
 features[] = logo

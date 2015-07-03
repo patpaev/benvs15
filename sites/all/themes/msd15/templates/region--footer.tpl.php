@@ -1,73 +1,44 @@
-
-  <div class="blk" style="background-color:#1F1F1F">
-	  <div class="social-media-wrap">
-		  <ul>
-		  <li><a href="http://www.facebook.com/msdsocial" class="facebook">Like us on Facebook</a></li>
-		  <li><a href="http://www.twitter.com/msdsocial" class="twitter">Follow us on Twitter</a></li>
-		  <li><a href="http://www.youtube.com/user/ABPUnimelb" class="youtube">Watch MSD TV on Youtube</a></li>
-		  <li><a href="http://www.linkedin.com/groups/ABP-UoM-4706402?gid=4706402&trk=nmp_rec_act_group_photo" class="linkedin">Join us on Linked in</a></li>
-		  </ul>
-	  </div>
+<footer class="cta hidden">
+  <ul>
+    <li>
+      <a href="#">
+        <svg role="img" class="icon">
+          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-facebook"></use>
+        </svg><!--
+        -->Facebook
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <svg role="img" class="icon">
+          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-twitter"></use>
+        </svg><!--
+        -->Twitter
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <svg role="img" class="icon">
+          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-linkedin"></use>
+        </svg><!--
+        -->LinkedIn
+      </a>
+    </li>
+  </ul>
+</footer>
+<div class="enquiry">
+  <div class="enquiry__cta accordion__title">
+    Have a question? <a class="button-small" href="enquiry-form">Enquire now</a>
   </div>
-  
-  
-  <div class="blk" style="background-color:#292929">
-  <div class="footer-links-wrap">
-    <div class="double-clmn">
-    
-	    <div style="min-height:190px; margin-top:36px">
-	      <?php
-	      $block = block_load('msd2014', 'footer_left_column');
-	      $build = _block_get_renderable_array(_block_render_blocks(array($block)));
-	      print drupal_render($build);
-	      ?>
-	    </div>
-	      
-	    <div class="fine-txt">
-    	  <?php
-	      $block = block_load('msd2014', 'footer_site_ownership');
-	      $build = _block_get_renderable_array(_block_render_blocks(array($block)));
-	      print drupal_render($build);
-	      ?>
-	    </div>
-     
+  <div class="enquiry__form accordion__hidden">
+    <iframe frameborder="0" src="https://enquiry.app.unimelb.edu.au/?formtype=ugraduate1&amp;cc=B-ENVS&amp;fn=OA" height="1419" width="700" style="display: inherit; margin: 0 auto; max-width: 700px; width: 100%; "></iframe>
+  </div>
+  <div class="enquiry__subline">
+    <div class="first">
+      or call <a href="tel:136352">13 MELB (13 6352)</a>
     </div>
-    
-    <div class="single-clmn">
-    
-	    <div style="min-height:190px; margin-top:36px">
-	      <?php
-	      $block = block_load('msd2014', 'footer_center_column');
-	      $build = _block_get_renderable_array(_block_render_blocks(array($block)));
-	      print drupal_render($build);
-	      ?>
-	    </div>
-	    
-		<div class="fine-txt">
-			We acknowledge that the Parkville campus<br>
-	  		is located on Wurundjeri land.
-	  	</div>
-    
+    <div class="secondary">
+      International: <a href="tel:0061390355511">+61 3 9035 5511</a>
     </div>
-    
-    <div class="single-clmn single-clmn-wide right-column">
-    <div class="box">
-	    <?php
-	    $block = block_load('msd2014', 'footer_right_column');
-	    $build = _block_get_renderable_array(_block_render_blocks(array($block)));
-	    print drupal_render($build);
-	    ?> 
-	</div>
-	<div class="box footer-enews-subscribe">
-	    <?php
-	    $block = block_load('msd2014', 'footer_subscribe_enews');
-	    $build = _block_get_renderable_array(_block_render_blocks(array($block)));
-	    print drupal_render($build);
-	    ?> 
-	</div>
-    </div>
-
-  
-  </div> 
-  
-  
+  </div>
+</div>

@@ -97,9 +97,6 @@
 	<?php print $styles; ?>
 	<?php print $scripts; ?>
 	
-	<script type="text/javascript" src="//use.typekit.net/iws4gen.js"></script>
-	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-
 </head>
 <body class="<?php print $classes; ?>" <?php print $attributes;?>>
   

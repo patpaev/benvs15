@@ -2,16 +2,17 @@
   <div class="page-inner">
     <div class="page-local-history">
       <a class="root" href="/" title="Website Home"><?= $site_name ?></a>
-      <span>/</span>
-      <!-- <a class="last" href="" title="A sub-page">A sub-page</a> -->
+      <?php if( ! drupal_is_front_page()  ) echo( "<span>/</span>" ) ?>
       <?php print render($page['navigation']); ?>
+      <!-- <a class="last" href="" title="A sub-page">A sub-page</a> -->
     </div> <!-- /.page-local-history -->
+    <?php if (drupal_is_front_page()) print("<div class='floating'></div>"); ?>
     <div role="main">
 
       <?php if ($logged_in) : ?>    
         <?php print $messages; ?>
       <?php endif; ?>
-     
+
       <?php print render($page['content']); ?>
       
       <?php if ($logged_in) : ?>
@@ -20,7 +21,9 @@
           <?php print "<ul>" . drupal_render($tabs['#secondary']) . "</ul>"; ?>
         </div>
       <?php endif; ?>
-    
+
+      <?php print render($page['footer']); ?>
+
     </div> <!-- /role="main" -->
     <div class="no-js" id="sitemap" role="navigation">
       <h2><?= $site_name ?></h2>

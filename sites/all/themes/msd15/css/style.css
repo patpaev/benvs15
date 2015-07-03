@@ -1,9 +1,5 @@
-/* @import must be at top of file, otherwise CSS will not work */
-@import url("//hello.myfonts.net/count/2a9d72");
-@font-face {font-family: 'HelveticaNeueLTStd-Bd';src: url('../webfonts/2A9D72_0_0.eot');src: url('../webfonts/2A9D72_0_0.eot?#iefix') format('embedded-opentype'),url('../webfonts/2A9D72_0_0.woff') format('woff'),url('../webfonts/2A9D72_0_0.ttf') format('truetype');}
-@font-face {font-family: 'HelveticaNeueLTStd-Roman';src: url('../webfonts/2A9D72_1_0.eot');src: url('../webfonts/2A9D72_1_0.eot?#iefix') format('embedded-opentype'),url('../webfonts/2A9D72_1_0.woff') format('woff'),url('../webfonts/2A9D72_1_0.ttf') format('truetype');}
-@font-face {font-family: 'HelveticaNeueLT-Light';src: url('../webfonts/2A9D72_2_0.eot');src: url('../webfonts/2A9D72_2_0.eot?#iefix') format('embedded-opentype'),url('../webfonts/2A9D72_2_0.woff') format('woff'),url('../webfonts/2A9D72_2_0.ttf') format('truetype');}
- 
+/* drupal-speicifc styling */
+
 .uomcontent .drupal-tabs {
   border-radius: 3px;
   border-radius: 0.1875rem;
@@ -12,7 +8,7 @@
   color: #fff;
   position: absolute;
   right: 10px;
-  top: 110px;
+  top: 144px;
   z-index: 10;
 }
 
@@ -60,9 +56,65 @@
   display: inline-block!important;
 }
 
-.uomcontent .major .fullwidth p {
-  font-size: 1em;
-  line-height: 1.5789;
+.logged-in .uomcontent .page-header {
+  padding-top: 29px;
+}
+
+.logged-in [role="main"] {
+  padding-top: 29px;
+}
+
+
+/* patches */
+
+@media screen and (min-width: 769px) {
+  .uomcontent .navigation-block-listing ul.narrow ul li {
+    width: 100%;  
+  }
+}
+
+.uomcontent [role="main"] section.links ul {
+  padding: 0 3%;
+}
+
+@media screen and (min-width: 700px) {
+  .uomcontent [role="main"] section.links ul {
+    padding: 0;
+  }
+}
+
+/*
+Center-align listings
+
+.uomcontent .navigation-block-listing ul {
+  text-align: center;
+}
+
+.uomcontent .navigation-block-listing ul  li {
+  text-align: left;
+}*/
+
+.uomcontent footer.cta li svg {
+  fill: currentColor;
+  height: 1.1rem;
+  width: 2.2rem;
+    -webkit-transform: scale(1.75);
+    -moz-transform: scale(1.75);
+    -o-transform: scale(1.75);
+  transform: scale(1.75);
+
+}
+
+/* template modifications/extensions */
+.entry-requirements sup {
+  background-color: grey;
+  background-color: rgba(0, 0, 0, 0.35);
+  color: rgb(255, 255, 255);
+  font-size: 60%;
+  margin: 0px 0.1em;
+  padding: 0.05em 0.35em;
+  border-radius: 50% 50% 50% 50%;
+  border: 1px solid rgba(0,0,0,0.45);
 }
 
 .legend {
@@ -132,18 +184,26 @@
   width: 12%;
 }
 
+@media screen and (min-width: 481px) {
+  .node-type-major .uomcontent .fullwidth blockquote {
+    font-size: 21px;
+    font-size: 1.3rem;
+  }
+}
+
 .node-type-major .fullwidth {
-  background-position: 83% 100%;
   display: block;
 }
 .node-type-major .fullwidth blockquote {
   padding-bottom: 0;
 }
 
-.node-type-major .fullwidth p {
+.node-type-major .uomcontent .fullwidth p {
+  font-size: 1em;
   padding-top: 0;
   padding-right: 1em;
 }
+
 .node-type-major .half .fullwidth blockquote {
   max-width: 490px;
 }

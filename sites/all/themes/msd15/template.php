@@ -18,24 +18,15 @@ function msd15_preprocess_node(&$vars) {
   if ($vars["is_front"]) {
     $vars["theme_hook_suggestions"][] = "node__front";
   }
-  if ($blocks = block_get_blocks_by_region('rightcolumn')) {
-    $vars['rightcolumn'] = $blocks;
-  }
-  // Use custom node template for news
-  if(request_path() == "news") {
-    $vars['theme_hook_suggestions'][] = 'node__news_list';
-  }
-  if(request_path() == "events") {
-    $vars['theme_hook_suggestions'][] = 'node__events_list';
-  }
-  if(request_path() == "past-events") {
-    $vars['theme_hook_suggestions'][] = 'node__past_events_list';
-  }
-  if(request_path() == "wunderlich-757") {
-    $vars['theme_hook_suggestions'][] = 'node__wunderlich_events_list';
-  }
-  if(request_path() == "757-swanston-street-building") {
-    $vars['theme_hook_suggestions'][] = 'node__757_swanston_events_list';
+  // Get a list of all the regions for this theme
+  foreach (system_region_list($GLOBALS['theme']) as $region_key => $region_name) {
+    // Get the content for each region and add it to the $region variable
+    if ($blocks = block_get_blocks_by_region($region_key)) {
+      $vars['region'][$region_key] = $blocks;
+    }
+    else {
+      $vars['region'][$region_key] = array();
+    }
   }
 }
 
@@ -75,23 +66,6 @@ function msd15_preprocess_page(&$vars, $hook) {
       array_splice($vars['theme_hook_suggestions'], -1, 0, 'page__' . str_replace('-', '_', $page_name));
     }
   }
-
-  // if (isset($vars['main_menu'])) {
-  //   $vars['primary_nav'] = theme('links__system_main_menu', array(
-  //     'links' => $vars['main_menu'],
-  //     'attributes' => array(
-  //       'class' => array('links', 'inline', 'main-menu'),
-  //     ),
-  //     'heading' => array(
-  //       'text' => t('Main menu'),
-  //       'level' => 'h2',
-  //       'class' => array('element-invisible'),
-  //     )
-  //   ));
-  // }
-  // else {
-  //   $vars['primary_nav'] = FALSE;
-  // }
 }
 
 function msd15_menu_link__main_menu(array $variables) {
@@ -119,4 +93,8 @@ function _unimelb_menu_tree($region, $menu_name, $max_depth = null) {
   }
 
   return $menu_output[$region];
+}
+
+function msd15_css_alter(&$css) { 
+  unset($css[drupal_get_path('module','system').'/system.theme.css']); 
 }
