@@ -4,6 +4,11 @@
 <?php
 // save fields to local variables
 
+// get an image's URL 
+$item_hero_image = field_get_items('node', $node, 'field_hero_image');
+$hero_image = $item_hero_image[0]['uri'];
+$hero_image_url = file_create_url($hero_image);
+
 $item_body = field_get_items('node', $node, 'body');
 $body = field_view_value('node', $node, 'body', $item_body[0]);
 
@@ -30,11 +35,25 @@ $related_pages = field_get_items('node', $node, 'field_related_pages');
 
 ?>
 
-<header>
-  <h1>
-    <?= drupal_get_title(); ?>
-  </h1>
-</header>
+<?php if ($item_hero_image): ?>
+
+  <header class="image" style="background-image:url(<?= $hero_image_url ?>);">
+    <div class="mid-align blurred">
+      <h1>
+        <?= drupal_get_title(); ?>
+      </h1>
+    </div>
+  </header>
+
+<?php else: ?>
+
+    <header>
+      <h1>
+        <?= drupal_get_title(); ?>
+      </h1>
+    </header>
+
+<?php endif; ?>
 
 <?php if ($jumpnav == "yes"): ?> 
   <div class="jumpnav"></div> 
