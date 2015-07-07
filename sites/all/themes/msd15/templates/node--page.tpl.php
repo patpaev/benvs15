@@ -9,6 +9,10 @@ $item_hero_image = field_get_items('node', $node, 'field_hero_image');
 $hero_image = $item_hero_image[0]['uri'];
 $hero_image_url = file_create_url($hero_image);
 
+// get a default html output value
+$item_tagline = field_get_items('node', $node, 'field_tagline');
+$tagline = field_view_value('node', $node, 'field_tagline', $item_tagline[0]);
+
 $item_body = field_get_items('node', $node, 'body');
 $body = field_view_value('node', $node, 'body', $item_body[0]);
 
@@ -42,6 +46,7 @@ $related_pages = field_get_items('node', $node, 'field_related_pages');
       <h1>
         <?= drupal_get_title(); ?>
       </h1>
+        <?php if($item_tagline) print render($tagline); ?>
     </div>
   </header>
 
@@ -51,6 +56,7 @@ $related_pages = field_get_items('node', $node, 'field_related_pages');
       <h1>
         <?= drupal_get_title(); ?>
       </h1>
+      <?php if($item_tagline) print render($tagline); ?>
     </header>
 
 <?php endif; ?>
