@@ -68,6 +68,7 @@
 /* patches */
 
 .uomcontent figure figcaption {
+  margin: 0 auto;
   max-width: 700px;
   max-width: 43.75rem;
 }
