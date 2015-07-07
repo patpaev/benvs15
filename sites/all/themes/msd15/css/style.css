@@ -67,6 +67,10 @@
 
 /* patches */
 
+.uomcontent small {
+  font-size: 65%;
+}
+
 @media screen and (min-width: 769px) {
   .uomcontent .navigation-block-listing ul.narrow ul li {
     width: 100%;  
@@ -146,6 +150,8 @@ Center-align listings
   margin: 0 auto;
   width: 65px;
 }
+
+.course-plan table td a { color: #000; }
 
 .category-a { background-color: #d2f1cf; }
 .category-b { background-color: #F8D99B; }
