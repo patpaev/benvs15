@@ -67,6 +67,11 @@
 
 /* patches */
 
+.uomcontent figure figcaption {
+  max-width: 700px;
+  max-width: 43.75rem;
+}
+
 .uomcontent small {
   font-size: 65%;
 }
