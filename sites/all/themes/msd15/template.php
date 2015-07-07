@@ -80,21 +80,6 @@ function msd15_menu_link__main_menu(array $variables) {
   return '<li>' . $output . $sub_menu . "</li>\n";
 }
 
-function _unimelb_menu_tree($region, $menu_name, $max_depth = null) {
-  $menu_output = &drupal_static(__FUNCTION__, array());
-
-  if (!isset($menu_output[$region])) {
-    if ($max_depth == 0) {
-      $max_depth = null;
-    }
-
-    $tree = menu_tree_page_data($menu_name, $max_depth);
-    $menu_output[$region] = menu_tree_output($tree);
-  }
-
-  return $menu_output[$region];
-}
-
 function msd15_css_alter(&$css) { 
   unset($css[drupal_get_path('module','system').'/system.theme.css']); 
 }
