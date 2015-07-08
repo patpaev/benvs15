@@ -85,7 +85,7 @@ switch ($show_children) {
     <h2 id="related-links">Related Links</h2>
     <ul>
       <?php foreach($related_pages as $related_page): ?>
-        <li><a href="<?= $related_page['display_url'] ?>"><?= $related_page['title'] ?></a></li>
+        <li><a href="<?= $related_page['url'] ?>"><?= $related_page['title'] ?></a></li>
       <?php endforeach; ?>
     </ul>
   </section>
