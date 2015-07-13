@@ -112,6 +112,6 @@ $has_student_quote = ( $item_student_photo && $item_student_quote && $item_stude
     <a class="button-hero-reverse" href="/majors">All majors</a>
   </section>
   <section class="center">
-    <a class="button-hero" href="/course#requirements">Apply now</a>
+    <a class="button-hero" href="/course/#requirements">Apply now</a>
   </section>
 </div>
