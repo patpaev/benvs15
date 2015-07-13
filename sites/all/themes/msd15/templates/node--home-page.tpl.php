@@ -40,12 +40,6 @@ $related_pages = field_get_items('node', $node, 'field_related_pages');
   </div>
 </header>
 
-<?php if($item_body): ?>
-  <section>
-    <?php print render($body); ?>
-  </section>
-<?php endif; ?>
-
 <ul class="pathfinder-3">
   <?php 
   if ($pathways) {
@@ -56,6 +50,12 @@ $related_pages = field_get_items('node', $node, 'field_related_pages');
   }
   ?>
 </ul>
+
+<?php if($item_body): ?>
+  <section>
+    <?php print render($body); ?>
+  </section>
+<?php endif; ?>
 
 <section class="alt">
   <?php if($item_overview_video): ?>
