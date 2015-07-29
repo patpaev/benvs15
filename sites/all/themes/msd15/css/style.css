@@ -64,6 +64,9 @@
   padding-top: 29px;
 }
 
+.page-header.fixed header {
+  background: #fff!important;
+}
 
 /* patches */
 
