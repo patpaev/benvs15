@@ -32,11 +32,16 @@ switch ($config['depth']) {
         $entity = entity_load('node', array($nid));
         if(isset($entity[$nid])) {
           $node_curr = $entity[$nid];
-          $node_curr_summary = field_view_field( 'node', $node_curr, 'body', array(
-            'label' => 'hidden', 
-            'type' => 'text_summary_or_trimmed', 
-            'settings' => array('trim_length' => 150)
-          ));
+          $item_summary = field_get_items('node', $node_curr, 'field_summary');
+          if ($item_summary) {
+            $node_curr_summary = field_view_value('node', $node_curr, 'field_summary', $item_summary[0]);  
+          } else {
+            $node_curr_summary = field_view_field( 'node', $node_curr, 'body', array(
+              'label' => 'hidden', 
+              'type' => 'text_summary_or_trimmed', 
+              'settings' => array('trim_length' => 150)
+            ));
+          }
           echo( '<li><a href="/'
            .  drupal_get_path_alias($menu_item['#href'])
            .  '">'
