@@ -55,3 +55,19 @@ Disallow: /?q=user/password/
 Disallow: /?q=user/register/
 Disallow: /?q=user/login/
 Disallow: /?q=user/logout/
+
+User-agent: facebookexternalhit/1.1
+Disallow:
+Crawl-delay: 0
+
+User-agent: facebookexternalhit
+Disallow:
+Crawl-delay: 0
+
+User-agent: Facebot
+Disallow:
+Crawl-delay: 0
+
+User-agent: Twitterbot
+Disallow:
+Crawl-delay: 0

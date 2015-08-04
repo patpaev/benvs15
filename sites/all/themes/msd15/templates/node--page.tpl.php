@@ -1,6 +1,3 @@
-<?php // dpm($node); ?>
-
-
 <?php
 // save fields to local variables
 
@@ -24,18 +21,35 @@ $show_children = $item_show_children[0]['value'];
 
 $related_pages = field_get_items('node', $node, 'field_related_pages');
 
-// get a photo url
-// $item_student_photo = field_get_items('node', $node, 'field_student_photo');
-// $student_photo = $item_student_photo[0]['uri'];
-// $student_photo_url = file_create_url($student_photo);
+// FB:OG
+if ($item_hero_image)
+  $main_image = $hero_image_url;
+else
+  $main_image = '/default.jpg';
 
-// get a raw text value
-// $item_student_quote = field_get_items('node', $node, 'field_student_quote');
-// $student_quote = $item_student_quote[0]['value'];
+$field_summary = field_view_field( 'node', $node, 'body', array(
+        'label' => 'hidden', 
+        'type' => 'text_summary_or_trimmed', 
+        'settings' => array()
+      ));
+// give it a big clean out 
+$summary = html_entity_decode(preg_replace("/&nbsp;/i", " ", htmlentities(strip_tags($field_summary[0]['#markup']))));
+$summary = preg_replace('/"/', "'", $summary);
+$summary = preg_replace("/(\r?\n){2,}/", ' ', $summary);
 
-// get a default html output value
-// $item_career_outcomes = field_get_items('node', $node, 'field_career_outcomes');
-// $career_outcomes = field_view_value('node', $node, 'field_career_outcomes', $item_career_outcomes[0]);
+$inline_script = ''
+.'<meta property="og:title"                  content="'. drupal_get_title() .'" />'
+.'<meta property="og:image"                  content="'. $main_image .'" />'
+.'<meta property="og:description"            content="'. trim($summary) .'" />'
+.'<meta name="twitter:card"                  content="summary" />'
+.'<meta name="twitter:site"                  content="@msdsocial" />'
+.'<meta name="twitter:creator"               content="@msdsocial" />'
+.'';
+$element = array(
+  '#type' => 'markup',
+  '#markup' => $inline_script,
+);
+drupal_add_html_head($element, 'fb ogs');
 
 ?>
 
