@@ -4,7 +4,7 @@ $item_body = field_get_items('node', $node, 'body');
 $body = $item_body[0]['value'];
 
 
-$field_summary = field_view_field( 'node', $node, 'body', array(
+$field_summary = field_view_field( 'node', $node, 'field_summary', array(
         'label' => 'hidden', 
         'type' => 'text_summary_or_trimmed', 
         'settings' => array()
