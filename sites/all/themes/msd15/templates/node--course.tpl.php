@@ -1,6 +1,3 @@
-<?php // dpm($node); ?>
-
-
 <?php
 // save fields to local variables
 
@@ -54,6 +51,33 @@ if(array_key_exists("field_application_checklist", $content))
 $item_hero_image = field_get_items('node', $node, 'field_hero_image');
 $hero_image = $item_hero_image[0]['uri'];
 $hero_image_url = file_create_url($hero_image);
+
+// FB:OG
+$main_image = $hero_image_url;
+$field_summary = field_view_field( 'node', $node, 'field_overview', array(
+        'label' => 'hidden', 
+        'type' => 'text_summary_or_trimmed', 
+        'settings' => array()
+      ));
+// give it a big clean out 
+$summary = html_entity_decode(preg_replace("/&nbsp;/i", " ", htmlentities(strip_tags($field_summary[0]['#markup']))));
+$summary = preg_replace('/"/', "'", $summary);
+$summary = preg_replace("/(\r?\n){2,}/", ' ', $summary);
+
+$inline_script = ''
+.'<meta property="og:title"                  content="'. drupal_get_title() .' – ' . variable_get('site_name', '') .'" />'
+.'<meta property="og:image"                  content="'. $main_image .'" />'
+.'<meta property="og:description"            content="'. trim($summary) .'" />'
+.'<meta name="twitter:card"                  content="summary" />'
+.'<meta name="twitter:site"                  content="@msdsocial" />'
+.'<meta name="twitter:creator"               content="@msdsocial" />'
+
+.'';
+$element = array(
+  '#type' => 'markup',
+  '#markup' => $inline_script,
+);
+drupal_add_html_head($element, 'fb ogs');
 
 ?>
 
