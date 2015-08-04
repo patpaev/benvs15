@@ -33,7 +33,10 @@ $field_summary = field_view_field( 'node', $node, 'body', array(
         'settings' => array()
       ));
 // give it a big clean out 
-$summary = html_entity_decode(preg_replace("/&nbsp;/i", " ", htmlentities(strip_tags($field_summary[0]['#markup']))));
+if (isset($field_summary[0]))
+  $summary = html_entity_decode(preg_replace("/&nbsp;/i", " ", htmlentities(strip_tags($field_summary[0]['#markup']))));
+else 
+  $summary = drupal_get_title() . ', ' . variable_get('site_name', '') . ', ' . 'The University of Melbourne.';
 $summary = preg_replace('/"/', "'", $summary);
 $summary = preg_replace("/(\r?\n){2,}/", ' ', $summary);
 
