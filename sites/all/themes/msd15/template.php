@@ -7,7 +7,7 @@ function msd15_preprocess_html(&$vars) {
   drupal_add_css('https://uom-design-system.s3.amazonaws.com/v1.0/uom.css', 'external');
   drupal_add_css(path_to_theme() . '/css/style.css');
   drupal_add_js('https://uom-design-system.s3.amazonaws.com/v1.0/uom.js', 'external');
-  drupal_add_js(path_to_theme() . '/js/main.js');
+  drupal_add_js(path_to_theme() . '/js/main.js', array('scope' => 'footer'));
 }
 
 
