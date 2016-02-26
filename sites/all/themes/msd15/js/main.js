@@ -3,17 +3,14 @@
  */
  
 var footerEnquiryButton = document.querySelector('.enquiry .enquiry__cta a.button-small');
-var contactPageIframe = document.querySelector('.page-node-38 .main iframe');
-
 if (footerEnquiryButton) addListener(footerEnquiryButton, 'click', function() {
   ga('send', 'event', 'Enquiry', 'Course Enquiry', 'Footer Enquiry Button', 1);
 });
 
-if (contactPageIframe) addListener(contactPageIframe, 'click', function() {
-  console.log('enquiring!')
-  ga('send', 'event', 'Enquiry', 'Course Enquiry', 'Contact Page Enquiry Form', 1);
-});
-
+jQuery(function(){
+  var contactPageIframe = document.querySelector('.page-node-38 [role=main] iframe');
+  if (contactPageIframe) ga('send', 'event', 'Enquiry', 'Course Enquiry', 'Contact Page Enquiry Form', 1);  
+})
 
 /**
  * Utility to wrap the different behaviors between W3C-compliant browsers
